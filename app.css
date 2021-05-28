@@ -1,0 +1,91 @@
+h1 {
+  color: blue;
+  background-color: #ff9847;
+  width: fit-content;
+}
+label {
+  color: blue;
+}
+input {
+  color: firebrick;
+  background-color: aquamarine;
+}
+
+button {
+  color: blue;
+  background-color: rgb(241, 66, 66);
+}
+option {
+  color: firebrick;
+}
+
+.classic-4 {
+  padding-bottom: 5px;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  overflow: hidden;
+  color: #0000;
+  text-shadow: 0 0 0 #000, 10ch 0 0 #000;
+  background: linear-gradient(#000 0 0) bottom left/0% 3px no-repeat;
+  animation: c4 1.5s infinite;
+}
+.classic-4:before {
+  content: "Loading...";
+}
+@keyframes c4 {
+  80% {
+    text-shadow: 0 0 0 #000, 10ch 0 0 #000;
+    background-size: 100% 3px;
+  }
+  100% {
+    text-shadow: -10ch 0 0 #000, 0 0 0 #000;
+  }
+}
+
+.classic-6 {
+  --w: 10ch;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  letter-spacing: var(--w);
+  width: var(--w);
+  overflow: hidden;
+  white-space: nowrap;
+  text-shadow: calc(-1 * var(--w)) 0, calc(-2 * var(--w)) 0,
+    calc(-3 * var(--w)) 0, calc(-4 * var(--w)) 0, calc(-5 * var(--w)) 0,
+    calc(-6 * var(--w)) 0, calc(-7 * var(--w)) 0, calc(-8 * var(--w)) 0,
+    calc(-9 * var(--w)) 0;
+  animation: c6 2s infinite;
+}
+.classic-6:before {
+  content: "Loading...";
+}
+@keyframes c6 {
+  20% {
+    text-shadow: calc(-1 * var(--w)) 0, calc(-2 * var(--w)) 0 red,
+      calc(-3 * var(--w)) 0, calc(-4 * var(--w)) 0 #ffa516,
+      calc(-5 * var(--w)) 0 #63fff4, calc(-6 * var(--w)) 0,
+      calc(-7 * var(--w)) 0, calc(-8 * var(--w)) 0 green, calc(-9 * var(--w)) 0;
+  }
+  40% {
+    text-shadow: calc(-1 * var(--w)) 0, calc(-2 * var(--w)) 0 red,
+      calc(-3 * var(--w)) 0 #e945e9, calc(-4 * var(--w)) 0,
+      calc(-5 * var(--w)) 0 green, calc(-6 * var(--w)) 0 orange,
+      calc(-7 * var(--w)) 0, calc(-8 * var(--w)) 0 green, calc(-9 * var(--w)) 0;
+  }
+  60% {
+    text-shadow: calc(-1 * var(--w)) 0 lightblue, calc(-2 * var(--w)) 0,
+      calc(-3 * var(--w)) 0 #e945e9, calc(-4 * var(--w)) 0,
+      calc(-5 * var(--w)) 0 green, calc(-6 * var(--w)) 0,
+      calc(-7 * var(--w)) 0 yellow, calc(-8 * var(--w)) 0 #ffa516,
+      calc(-9 * var(--w)) 0 red;
+  }
+  80% {
+    text-shadow: calc(-1 * var(--w)) 0 lightblue, calc(-2 * var(--w)) 0 yellow,
+      calc(-3 * var(--w)) 0 #63fff4, calc(-4 * var(--w)) 0 #ffa516,
+      calc(-5 * var(--w)) 0 red, calc(-6 * var(--w)) 0,
+      calc(-7 * var(--w)) 0 grey, calc(-8 * var(--w)) 0 #63fff4,
+      calc(-9 * var(--w)) 0;
+  }
+}

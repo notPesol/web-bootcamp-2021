@@ -11,7 +11,77 @@
 <body>
     <h1>Form Demo</h1>
     <form action="./tacos">
-
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
+        </p>
+        <p>
+            <label for="color">Select color:</label>
+            <input type="color" name="color" id="color" value="#ffffff">
+        </p>
+        <p>
+            <label for="number">Input number</label>
+            <input type="number" name="number" id="number" min="1" max="10">
+        </p>
+        <button>Submit</button>
+    </form>
+    <h1>Hijacking Search</h1>
+    <form action="https://www.google.com/search" target="_blank">
+        <p>
+            <label for="q">Google search:</label>
+            <input type="text" name="q" id="q">
+        </p>
+        <button>Search</button>
+    </form>
+    <form action="https://www.amazon.com/s" target="_blank">
+        <p>
+            <label for="k">Amazon search:</label>
+            <input type="text" name="k" id="k">
+        </p>
+        <button>Search</button>
+    </form>
+    <h1>Please Select Fruit</h1>
+    <form action="./tacos">
+        <input type="radio" name="fruit" id="orange" value="Orange">
+        <label for="orange">Orange</label>
+        <input type="radio" name="fruit" id="grap" value="Grap">
+        <label for="grap">Grap</label>
+        <input type="radio" name="fruit" id="mango" value="Mango">
+        <label for="mango">Mango</label>
+        <input type="radio" name="fruit" id="Watermelon" value="Watermelon">
+        <label for="Watermelon">Watermelon</label>
+        <p><Button>Submit</Button></p>
+    </form>
+    <h1>Select input Demo!</h1>
+    <form action="./tacos">
+        <p>
+            <label for="color">Please select color</label>
+            <select name="color" id="color">
+                <option value="red">red</option>
+                <option value="green">green</option>
+                <option value="blue">blue</option>
+                <option value="yello">yello</option>
+            </select>
+        </p>
+        <button>OK</button>
+    </form>
+    <h1>Range Demo</h1>
+    <form action="./tacos">
+        <p>
+            <label for="item">Amout of item</label>
+            <input type="range" value="1" name="item" id="item" min="1" max="100" step="7">
+        </p>
+        <button>OK</button>
+    </form>
+    <h1>Textarea Demo</h1>
+    <form action="./tacos">
+        <p>
+            <label for="detail">Detail:</label><br>
+            <textarea name="detail" id="detail" cols="40" rows="10" placeholder="detail here..."></textarea>
+        </p>
+        <button>OK</button>
     </form>
 </body>
 
