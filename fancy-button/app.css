@@ -1,0 +1,23 @@
+body {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+button {
+  padding: 1em 2em;
+  background: none;
+  border: 2px solid;
+  color: darkorange;
+  transition: color 0.5s, border-corlor 0.5s, box-shadow 0.5s, transform 0.5s;
+}
+
+button:hover {
+  color: white;
+  border-color: greenyellow;
+  box-shadow: 0 0.5em 0.5em -0.5em greenyellow;
+  transform: translateY(-0.2em);
+  cursor: pointer;
+}

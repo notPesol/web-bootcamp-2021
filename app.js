@@ -8,3 +8,18 @@ async function myFunc(param) {
 }
 
 myFunc("Hi Bro!");
+
+
+let person = {
+    name: 'Pesol',
+    age: '24',
+    getDetail: () => `name: ${this.name} \nage: ${this.age}`
+}
+
+for (const key in person) {
+    if (Object.hasOwnProperty.call(person, key)) {
+        const element = person[key];
+        console.log(element);
+    }
+
+}
