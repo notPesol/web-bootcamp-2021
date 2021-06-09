@@ -274,3 +274,190 @@
 //         console.log(d)
 //     }
 // }
+
+// function rollDie(numSide) {
+//     if (numSide === undefined) {
+//         numSide = 6
+//     }
+//     return Math.floor(Math.random() * numSide) + 1
+// }
+
+// function rollDie(numSide = 6) {
+//     return Math.floor(Math.random() * numSide) + 1
+// }
+
+// function greet(person, msg = "Hey", punc = "!") {
+//     console.log(`${msg}, ${person}${punc}`)
+// }
+
+// Spread OP
+Math.max(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 12, 23, 43)
+
+const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 12, 23, 43]
+Math.max(...nums)
+
+console.log(...nums)
+
+// Spread OP can concat Array
+const dogs = ['Chiwawa', 'Syberian', 'Thai']
+const cats = ['Wichian', 'Bengol', 'Sfrings', 'Bitrist']
+
+const allPet = [...cats, ...dogs]
+
+//Spread can expand String
+const myStr = "Hello, World!";
+const myArr = [...myStr];
+
+// Spread OP cat use with Object , can coppy properties and value
+const person1 = {
+    name: "Adam",
+    color: 'Blue'
+}
+const person2 = {
+    name: "Adam",
+    color: 'Blue'
+}
+
+const person3 = {
+    ...person1,
+    pet: ['cat', 'dog']
+}
+
+const dataFromForm = {
+    email: "test01@mail.com",
+    username: "test01",
+    password: "Sawaddee989"
+}
+
+const newUser = {
+    ...dataFromForm,
+    id: 1,
+    isAdmin: false
+}
+
+//Spread to object
+const obj = {
+    ..."HelloWorld!!!",
+}
+
+//Arguments parameter
+// function sum() {
+//     let total = 0;
+//     for (let i = 0; i < arguments.length; i++) {
+//         total += arguments[i]
+//     }
+//     return total;
+// }
+//Arguments parameter is not Array
+function sum2() {
+    return arguments.reduce((total, current) => total + current) // Error not use Array Method!!!!!!
+}
+
+//Rest parameter (it transform to Array)
+// Can use Array Method becuse it is Array!!!!!!!!!!
+function sum(...nums) {
+    return nums.reduce((total, current) => total + current)
+}
+
+function min(...nums) {
+    return nums.reduce((min, current) => {
+        if (current < min) return current
+        return min
+    })
+}
+function max(...nums) {
+    return nums.reduce((max, current) => {
+        if (current > max) return current
+        return max
+    })
+}
+
+function raceResult(gold, silver, ...everyoneElse) {
+    console.log(`Gold Medel go to: ${gold}`)
+    console.log(`Silver Medel go to: ${silver}`)
+    console.log(`And thank to everyone else: ${everyoneElse}`)
+}
+
+// Destructuring
+// Array Destructuring
+// const scores = [100, 95, 87, 65, 60, 55, 49, 43, 34, 31, 21, 10]
+//old way
+// const gold = scores[0]
+// const silver = scores[1]
+// const bronze = scores[2]
+// new way
+// const [gold, silver, bronze] = scores;
+// const [fastest, ...everyoneElse] = scores;
+
+//Object Destructuring
+const user = {
+    email: "haha@mail.com",
+    password: "swferg13",
+    firstName: "Adam",
+    lastName: "Smith",
+    born: 1850,
+    die: 1999,
+    bio: "He is a god of pubg game ok bro GG",
+    city: "LA",
+    state: "Califonito"
+}
+// Old way
+// const email = user.email
+// const firstName = user.firstName
+// const city = user.city
+// New way
+// const { email, firstName, city, born } = user;
+// change variables name
+const { born: birthYear, die: deathYear } = user
+
+
+//normal way
+function fullName1(obj) {
+    return `${obj.firstName} ${obj.lastName}`
+}
+
+//object destructuring way
+function fullName2(obj) {
+    const { firstName, lastName } = obj
+    return `${firstName} ${lastName}`
+}
+// Param Destructuring so much compact ♥♥♥♥♥
+function fullName({ firstName, lastName }) {
+    return `${firstName} ${lastName}`
+}
+
+const movies = [
+    {
+        name: "Prirate of Thailand",
+        score: 70,
+        year: 1997
+    },
+    {
+        name: "Django Cazy",
+        score: 80,
+        year: 1990
+    },
+    {
+        name: "Lion King",
+        score: 85,
+        year: 2005
+    },
+    {
+        name: "Titan ...",
+        score: 65,
+        year: 2014
+    },
+    {
+        name: "Green Hippo",
+        score: 95,
+        year: 1950
+    }
+]
+
+//use in Array method ♥♥♥
+//normal way >>>
+movies.filter(movie => movie.score > 90)
+// destructuring way
+movies.filter(({ score }) => score > 90)
+movies.map(({ name, year, score }) => `${name} (${year}) : ${score}`)
+
