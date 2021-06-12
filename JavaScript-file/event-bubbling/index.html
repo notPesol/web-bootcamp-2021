@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bubbling</title>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Event Bubbling</h1>
+    <section onclick="alert('section Click')">
+        <p onclick="alert('paragraph Click')">
+            Hello I'm paragraph
+            <button onclick="alert('button click')">Click</button>
+        </p>
+    </section>
+
+    <h2>Stop event bubbling</h2>
+    <div>
+        Click to hide.
+        <button>Change Color</button>
+    </div>
+    <script src="./app.js"></script>
+</body>
+
+</html>
