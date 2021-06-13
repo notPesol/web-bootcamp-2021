@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pingpong Score</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-
+    <title>Score Keeper</title>
 </head>
 
 <body>
@@ -15,26 +14,25 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-half is-offset-one-quarter">
-                    <div class="card">
+                    <div class="card has-background-danger-light">
                         <header class="card-header">
                             <p class="card-header-title">
-                                Pingpong Score Keeper
+                                Score Keeper
                             </p>
                         </header>
-                        <div class="card-image m-4">
+                        <div class="card-image">
                             <figure class="image">
-                                <img src="https://image.freepik.com/free-vector/realistic-design-table-tennis-background_52683-46121.jpg"
-                                    alt="" srcset="">
+                                <img src="https://image.freepik.com/free-vector/realistic-table-tennis-background_52683-45883.jpg"
+                                    alt="">
                             </figure>
                         </div>
                         <div class="card-content">
                             <div class="content">
-                                <h1 class="title is-1"><span id="p1Display">0</span> to <span id="p2Display">0</span>
-                                </h1>
+                                <h2 class="title"><span id="p1Display">0</span> to <span id="p2Display">0</span></h2>
                                 <p class="subtitle">Use the Button below to keep score</p>
-                                <label for="playto" class="label is-large is-inline">Playing to</label>
+                                <label class="label is-large is-inline" for="playto">Playing to</label>
                                 <div class="select is-rounded">
-                                    <select name="" id="playto">
+                                    <select class="" id="playto">
                                         <option value="3">3</option>
                                         <option value="4">4</option>
                                         <option value="5">5</option>
@@ -46,20 +44,21 @@
                                     </select>
                                 </div>
                             </div>
+                            <footer class="card-footer">
+                                <button class="button is-primary card-footer-item" id="p1Button">+1 Player
+                                    One</button>
+                                <button class="button is-info card-footer-item" id="p2Button">+1 Player
+                                    Two</button>
+                                <button class="button is-danger card-footer-item" id="reset">Reset</button>
+                            </footer>
+
                         </div>
-                        <footer class="card-footer">
-                            <button class="button is-primary card-footer-item is-large is-rounded" id="p1Button">+1
-                                Player
-                                One</button>
-                            <button class="button is-info card-footer-item is-large is-rounded" id="p2Button">+1 Player
-                                Two</button>
-                            <button class="button is-danger card-footer-item is-large is-rounded"
-                                id="reset">Reset</button>
-                        </footer>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </section>
 
     <script src="./app.js"></script>

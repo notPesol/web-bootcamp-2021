@@ -1,14 +1,19 @@
-const p1Button = document.querySelector('#p1Button')
-const p2Button = document.querySelector('#p2Button')
+const player1 = {
+    score: 0,
+    display: document.querySelector('#p1Display'),
+    button: document.querySelector('#p1Button')
+}
+
+const player2 = {
+    score: 0,
+    display: document.querySelector('#p2Display'),
+    button: document.querySelector('#p2Button')
+}
+
 const resetButton = document.querySelector('#reset')
 const playto = document.querySelector('#playto')
 
-const p1Display = document.querySelector('#p1Display')
-const p2Display = document.querySelector('#p2Display')
-
-let p1Score = 0;
-let p2Score = 0;
-let winningScore = 5;
+let winningScore = 3;
 let isGameOver = false;
 
 playto.addEventListener('change', function () {
@@ -16,38 +21,43 @@ playto.addEventListener('change', function () {
     reset()
 })
 
-p1Button.addEventListener('click', function () {
+function updateScore(player, opponent) {
     if (!isGameOver) {
-        p1Score += 1;
-        if (p1Score === winningScore) {
-            isGameOver = true
-            p1Display.classList.add('win')
-            p2Display.classList.add('lose')
+        player.score += 1;
+        if (player.score === winningScore - 1 && player.score === opponent.score) {
+            winningScore += 1
         }
-        p1Display.textContent = p1Score
+        else if (player.score === winningScore) {
+            isGameOver = true
+            player.display.classList.add('has-text-success')
+            opponent.display.classList.add('has-text-danger')
+
+            player.button.disabled = true
+            opponent.button.disabled = true
+        }
+        player.display.textContent = player.score
     }
+}
+
+p1Button.addEventListener('click', function () {
+    updateScore(player1, player2)
 })
 
 p2Button.addEventListener('click', function () {
-    if (!isGameOver) {
-        p2Score += 1;
-        if (p2Score === winningScore) {
-            isGameOver = true
-            p2Display.classList.add('win')
-            p1Display.classList.add('lose')
-        }
-        p2Display.textContent = p2Score
-    }
+    updateScore(player2, player1)
 })
 
 resetButton.addEventListener('click', reset)
 
+
+
 function reset() {
+    for (const p of [player1, player2]) {
+        p.score = 0
+        p.display.textContent = 0
+        p.display.classList.remove('has-text-success', 'has-text-danger')
+        p.button.disabled = false
+    }
     isGameOver = false
-    p1Score = 0
-    p2Score = 0
-    p1Display.textContent = p1Score
-    p2Display.textContent = p2Score
-    p1Display.classList.remove('win', 'lose')
-    p2Display.classList.remove('win', 'lose')
+
 }
