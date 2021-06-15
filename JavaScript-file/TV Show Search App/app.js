@@ -11,17 +11,28 @@ const createImage = (data) => {
     deleteOldRes()
     for (const show of data) {
         if (!show.show.image) continue
+
+        const imgContainer = document.createElement('div')
+        imgContainer.classList.add('imgContainer')
+        imgContainer.style.display = 'inline-block'
+        const h2 = document.createElement('h2')
+        if (show.show.rating.average) {
+            h2.textContent = `Score: ${show.show.rating.average}`
+        } else {
+            h2.textContent = `Score: No data?`
+        }
         const img = document.createElement('img')
         img.src = show.show.image.medium
-        document.querySelector('#container').append(img)
+        imgContainer.append(img, h2)
+        document.querySelector('#container').append(imgContainer)
     }
 }
 
 const deleteOldRes = () => {
-    const imgs = document.querySelectorAll('img')
-    if (!imgs) return
-    for (const img of imgs) {
-        document.querySelector('#container').removeChild(img)
+    const oldContainer = document.querySelectorAll('.imgContainer')
+    if (!oldContainer) return
+    for (const container of oldContainer) {
+        document.querySelector('#container').removeChild(container)
     }
 }
 
@@ -50,5 +61,4 @@ form.addEventListener('input', async function (ev) {
     } catch (error) {
         console.log(error)
     }
-
 })
