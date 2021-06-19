@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comments Index</title>
 </head>
+<style>
+    a {
+        background-color: yellow;
+        color: rgb(0, 0, 0);
+    }
+</style>
 
 <body>
     <h1>Comments</h1>
@@ -16,9 +22,12 @@
                 <%= comment.comment %> - <b>
                         <%= comment.username %>
                     </b>
+                    <a href="/comments/<%= comment.id %>">detail</a>
             </li>
             <% } %>
     </ul>
+    <a href="/comments/new">New comment</a>
+
 </body>
 
 </html>
