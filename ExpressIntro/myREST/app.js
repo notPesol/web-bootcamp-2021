@@ -67,10 +67,35 @@ app.get('/comments/:id', (req, res) => {
     console.log(`You are in ${req.url}`)
 })
 
+app.post('/comments', (req, res) => {
+    const { username, comment } = req.body
+    comments.push({ id: uuid(), username, comment })
+    res.redirect('/comments')
+    console.log('Add new comment success')
+})
 
+app.get('/comments/:id/edit', (req, res) => {
+    const { id } = req.params
+    const comment = comments.find(c => c.id === id)
+    res.render('comments/edit', { comment })
+    console.log(`You are in ${req.url}`)
+})
 
+app.patch('/comments/:id', (req, res) => {
+    const { id } = req.params
+    const { comment: editedComment } = req.body
+    const comment = comments.find(c => c.id === id)
+    comment.comment = editedComment
+    console.log('Edit success')
+    res.redirect('/comments')
+})
 
-
+app.delete('/comments/:id', (req, res) => {
+    const { id } = req.params
+    comments = comments.filter(c => c.id !== id)
+    res.redirect('/comments')
+    console.log('Delete comment success')
+})
 
 
 app.all('*', (req, res) => {
