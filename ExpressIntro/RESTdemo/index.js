@@ -20,7 +20,7 @@ app.use(methodOverride('_method')) // override method
 
 
 //fake comments
-const comments = [
+let comments = [
     {
         id: uuid(),
         username: 'Todd',
@@ -45,10 +45,12 @@ const comments = [
 
 app.get('/comments', (req, res) => {
     res.render('comments/index', { comments })
+    console.log('comments index page')
 })
 
 app.get('/comments/new', (req, res) => {
     res.render('comments/new')
+    console.log('new comment page')
 })
 
 // use post for save data
@@ -65,6 +67,7 @@ app.get('/comments/:id', (req, res) => {
     // use find method สำหรับ คืนค่า comment ที่ตรงกับ id เก็บไว้ในตัวแปรที่ระบุ
     const comment = comments.find(c => c.id === id)
     res.render('comments/detail', { comment })
+    console.log('detail page')
 })
 
 // for edit comment
@@ -72,6 +75,7 @@ app.get('/comments/:id/edit', (req, res) => {
     const { id } = req.params
     const comment = comments.find(c => c.id === id)
     res.render('comments/edit', { comment })
+    console.log('edit page')
 })
 
 app.patch('/comments/:id', (req, res) => {
@@ -83,7 +87,15 @@ app.patch('/comments/:id', (req, res) => {
     comment.comment = newCommentText
     res.redirect('/comments')
 
-    console.log(newCommentText)
+    console.log('back to index')
+})
+
+app.delete('/comments/:id', (req, res) => {
+    const { id } = req.params
+    // กรองเอาเฉพาะ คอมเม้นที่ id ไม่ตรงกับ id ที่รับมา เขียนทับเก็บไว้ในตัวแปรเดิม (comments)
+    comments = comments.filter(c => c.id !== id)
+    res.redirect('/comments')
+    console.log('back to index')
 })
 
 app.listen(PORT, () => {
