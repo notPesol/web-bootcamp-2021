@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 8000;
 const path = require('path');
+const methodOverride = require('method-override');
 
 const Product = require('./models/product');
 const mongoose = require('mongoose');
@@ -20,6 +21,8 @@ app.set('view engine', 'ejs');
 
 // set middleware for use other method
 app.use(express.urlencoded({ extended: true }));
+// use method override
+app.use(methodOverride('_method'))
 
 app.get('/products', async (req, res) => {
     const products = await Product.find({});
@@ -47,12 +50,22 @@ app.get('/products/:id', async (req, res) => {
     console.log(`You are in ${req.url}`);
 })
 
+// create route for Edit product 
 app.get('/products/:id/edit', async (req, res) => {
     const { id } = req.params;
     const foundProduct = await Product.findById(id);
     res.render('products/edit', { product: foundProduct });
     console.log(`You are in ${req.url}`);
 })
+// route for use update
+app.put('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+    res.redirect('/products/' + product._id)
+    console.log(product);
+
+})
+
 app.listen(PORT, () => {
     console.log(`App is listening on port: ${PORT}`);
 })
