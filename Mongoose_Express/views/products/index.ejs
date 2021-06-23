@@ -9,7 +9,24 @@
 </head>
 
 <body>
-    <h1>All Products</h1>
+    <h1>
+        <%= category %> Products
+    </h1>
+
+    <form method="get">
+        <label>Select Category</label>
+        <select name="category">
+            <% for (let c of categories) {%>
+                <option value="<%= c %>" <%=c===category ? 'selected' : '' %> >
+                    <a href="</products?category=<%= c %>">
+                        <%= c %>
+                    </a>
+                </option>
+                <% } %>
+        </select>
+        <button>OK</button>
+    </form>
+
     <ul>
         <% for(let p of products) {%>
             <li>
@@ -20,6 +37,9 @@
             <% } %>
     </ul>
     <a href="/products/new">Add new Product</a>
+    <% if (category !=='All' ) { %>
+        <a href="/products">All Products</a>
+        <% } %>
 </body>
 
 </html>

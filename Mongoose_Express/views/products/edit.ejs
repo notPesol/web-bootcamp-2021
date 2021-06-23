@@ -30,12 +30,10 @@
         <div class="form-control">
             <label for="category">Category</label>
             <select name="category" id="category">
-                <option value="<%= product.category %>">
-                    <%= product.category %>
-                </option>
-                <option value="fruit">fruit</option>
-                <option value="vegetable">vegetable</option>
-                <option value="daily">daily</option>
+                <% for(let category of categories) {%>
+                    <option value="<%= category %>" <%=category===product.category ? 'selected' : '' %> ><%= category %>
+                    </option>
+                    <% } %>
             </select>
         </div>
         <button class="form-control">Submit</button>
