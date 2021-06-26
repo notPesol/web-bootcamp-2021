@@ -5,7 +5,6 @@ const path = require('path');
 const methodOverride = require('method-override');
 const AppError = require('./AppError');
 
-
 const Product = require('./models/product');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -27,12 +26,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 
 
-const categories = ['fruit', 'vegetable', 'daily', 'mushroom', 'watch', 'computer'];
+const categories = ['fruit', 'vegetable', 'daily'];
 
+// สร้างฟังก์ชันเพื่อจับ Error โดยเฉพาะ สุดยอดดดดดดดดดดดดดด
+function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch(err => next(err));
+    }
+}
 
-app.get('/products', async (req, res) => {
+// ยัด try catch ให้หมดทุก route/path 555555555555555555
+app.get('/products', wrapAsync(async (req, res, next) => {
     const { category } = req.query
-
     if (category) {
         const products = await Product.find({ category });
         res.render('products/index', { products, category, categories });
@@ -40,9 +45,8 @@ app.get('/products', async (req, res) => {
         const products = await Product.find({});
         res.render('products/index', { products, category: 'All', categories });
     }
-
     console.log(`You are in ${req.url}`);
-});
+}));
 
 
 // route for new form
@@ -52,58 +56,66 @@ app.get('/products/new', (req, res) => {
 });
 
 // route create product
-app.post('/products', async (req, res) => {
+app.post('/products', wrapAsync(async (req, res, next) => {
+    // จัดการกับ mongoose error use try catch
     const product = new Product(req.body);
     await product.save();
     res.redirect(`/products/${product._id}`);
-});
+
+}));
 
 // for async must have next arg for errer handler
-app.get('/products/:id', async (req, res, next) => {
+app.get('/products/:id', wrapAsync(async (req, res, next) => {
     // ใช้ try catch ดีสุด 5555555
-    try {
-        const { id } = req.params;
-        const product = await Product.findById(id);
-        // handler in async as next();
-        if (!product) {
-            return next(new AppError('Product not found!', 404)); // use return เพื่อไม่ให้ทำคำสั่งถัดไป
-        }
-    } catch (error) {
-        return next(new AppError('Product not found!', 404));
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    // handler in async as next();
+    if (!product) {
+        throw new AppError('Product not found!', 404); // use return เพื่อไม่ให้ทำคำสั่งถัดไป
     }
-
     res.render('products/detail', { product });
     console.log(`You are in ${req.url}`);
-})
+
+}));
 
 // create route for Edit product 
-app.get('/products/:id/edit', async (req, res) => {
+app.get('/products/:id/edit', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const foundProduct = await Product.findById(id);
     // handler in async as next();
     if (!foundProduct) {
-        return next(new AppError('Product not found!', 404)); // use return เพื่อไม่ให้ทำคำสั่งถัดไป
+        throw new AppError('Product not found!', 404); // use return เพื่อไม่ให้ทำคำสั่งถัดไป
     }
     res.render('products/edit', { product: foundProduct, categories });
     console.log(`You are in ${req.url}`);
-})
+
+}));
 // route for use update
-app.put('/products/:id', async (req, res) => {
+app.put('/products/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
     res.redirect('/products/' + product._id)
     console.log(product);
-
-})
+}));
 
 // route for delete product
-app.delete('/products/:id', async (req, res) => {
+app.delete('/products/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleteProduct = await Product.findByIdAndDelete(id);
     console.log('Deleted', deleteProduct, 'success!');
     res.redirect('/products');
+}));
 
-});
+// make function for handler error
+function handleValidationError(err) {
+    console.dir(err);
+    return new AppError(`Validation Failed...${err.message}`, 400);
+}
+
+app.use((err, req, res, next) => {
+    if (err.name === 'ValidationError') err = handleValidationError(err);
+    next(err)
+})
 
 app.use((err, req, res, next) => {
     const { status = 500, message = 'Something went wrong!' } = err;
