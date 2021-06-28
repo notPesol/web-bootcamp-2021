@@ -4,9 +4,13 @@ const ejsMate = require('ejs-mate');
 const path = require('path');
 const PORT = 3000;
 const mongoose = require('mongoose');
+const { campgroundSchema } = require('./Schema')
 const Campground = require('./models/campground');
 
 const app = express();
+
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 
 //set engine
 app.engine('ejs', ejsMate);
@@ -31,7 +35,13 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error!'));
 db.once('open', () => {
     console.log('Database connected!')
-})
+});
+
+const validateCampground = (req, res, next) => {
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) throw new ExpressError(error, 400);
+    next();
+}
 
 // root page
 app.get('/', (req, res) => {
@@ -39,11 +49,11 @@ app.get('/', (req, res) => {
 });
 
 // route for index of campgrounds
-app.get('/campgrounds', async (req, res) => {
+app.get('/campgrounds', catchAsync(async (req, res, next) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds });
 
-});
+}));
 
 // route for form for user create new campgrounds
 app.get('/campgrounds/new', (req, res) => {
@@ -51,42 +61,51 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 // making a campground 
-app.post('/campgrounds', async (req, res) => {
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
     const { campground } = req.body;
     const newCampground = new Campground(campground);
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`);
-});
+}));
 
 // route for detail a campground
-app.get('/campgrounds/:id', async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     res.render('campgrounds/detail', { camp });
-});
+}));
 
 // route for edit  campground page
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     res.render('campgrounds/edit', { camp })
-});
+}));
 
 // update a campground
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findByIdAndUpdate(id, req.body.campground);
     res.redirect(`/campgrounds/${camp._id}`)
-});
+}));
 
 // delete a campground
-app.delete('/campgrounds', async (req, res) => {
+app.delete('/campgrounds', catchAsync(async (req, res) => {
     const { id } = req.body;
     const deletedCamp = await Campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
     console.log(deletedCamp, 'is DELETED !');
+}));
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page not found!', 404));
 })
 
+// route for handle error
+app.use((err, req, res, next) => {
+    const { message = 'SOMETHING WENT WRONG!', status = 500, stack } = err;
+    res.status(status).render('error', { message, status, stack });
+})
 
 // open server
 app.listen(PORT, () => {
