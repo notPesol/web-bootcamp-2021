@@ -4,8 +4,9 @@ const ejsMate = require('ejs-mate');
 const path = require('path');
 const PORT = 3000;
 const mongoose = require('mongoose');
-const { campgroundSchema } = require('./Schema')
+const { campgroundSchema, reviewSchema } = require('./Schema')
 const Campground = require('./models/campground');
+const Review = require('./models/review')
 
 const app = express();
 
@@ -43,6 +44,16 @@ const validateCampground = (req, res, next) => {
     next();
 }
 
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(d => d.message);
+        throw new ExpressError(msg, 400);
+    }
+    next();
+
+}
+
 // root page
 app.get('/', (req, res) => {
     res.render('home');
@@ -71,7 +82,7 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
 // route for detail a campground
 app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const camp = await Campground.findById(id);
+    const camp = await Campground.findById(id).populate('reviews');
     res.render('campgrounds/detail', { camp });
 }));
 
@@ -94,7 +105,25 @@ app.delete('/campgrounds', catchAsync(async (req, res) => {
     const { id } = req.body;
     const deletedCamp = await Campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
-    console.log(deletedCamp, 'is DELETED !');
+}));
+
+// make a review
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
+    const camp = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    camp.reviews.push(review);
+    await review.save();
+    await camp.save();
+    res.redirect(`/campgrounds/${camp._id}`);
+
+}));
+
+//delete a review
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
 }));
 
 app.all('*', (req, res, next) => {
