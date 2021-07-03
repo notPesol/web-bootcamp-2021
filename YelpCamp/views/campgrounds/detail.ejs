@@ -24,8 +24,8 @@
                 <% if (currentUser && currentUser.equals(camp.author)) {%>
                     <div class="card-body">
                         <a href="/campgrounds/<%= camp._id %>/edit" class="card-link btn btn-warning">Edit</a>
-                        <form class="d-inline float-end" action="/campgrounds?_method=DELETE" method="POST">
-                            <input type="hidden" name="id" value="<%= camp._id %>">
+                        <form class="d-inline float-end" action="/campgrounds/<%= camp._id %>?_method=DELETE"
+                            method="POST">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                     </div>
