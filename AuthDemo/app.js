@@ -36,6 +36,13 @@ app.get('/register', (req, res) => {
     res.render('register');
 });
 
+app.post('/register', async (req, res) => {
+    const { password, username } = req.body
+    const user = new User({ username, password });
+    await user.save();
+    res.redirect('/')
+})
+
 app.get('/login', (req, res) => {
     res.render('login');
 });
@@ -49,13 +56,6 @@ app.post('/login', async (req, res) => {
     req.session.user_id = user._id;
     res.render('secret')
 });
-
-app.post('/register', async (req, res) => {
-    const { password, username } = req.body
-    const user = new User({ username, password });
-    await user.save();
-    res.redirect('/')
-})
 
 app.get('/secret', requiredLogin, (req, res) => {
     res.render('secret');

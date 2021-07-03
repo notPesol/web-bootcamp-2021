@@ -5,6 +5,8 @@ const path = require('path');
 const PORT = 3000;
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 const mongoose = require('mongoose');
 
@@ -12,6 +14,10 @@ const app = express();
 
 const campgroundsRoute = require('./routes/campgrounds')
 const reviewsRoute = require('./routes/reviews');
+const usersRoute = require('./routes/users')
+
+const User = require('./models/user');
+
 
 const ExpressError = require('./utils/ExpressError');
 
@@ -56,14 +62,30 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// global variable
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
+app.use('/', usersRoute);
 app.use('/campgrounds', campgroundsRoute);
 app.use('/campgrounds/:id/reviews', reviewsRoute);
+
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({ email: 'pesol@lol.com', username: 'pesol' });
+    const newUser = await User.register(user, 'monkey') // save โดยอัตโนมัติ
+    res.send(newUser);
+})
 
 // root page
 app.get('/', (req, res) => {
@@ -76,11 +98,6 @@ app.all('*', (req, res, next) => {
 
 // route for handle error
 app.use((err, req, res, next) => {
-    if (err.name === 'CastError') {
-        req.flash('error', 'Cannot find that Campground!');
-        res.redirect('/campgrounds');
-        return
-    }
     const { message = 'SOMETHING WENT WRONG!', status = 500, stack } = err;
     res.status(status).render('error', { message, status, stack });
 })
