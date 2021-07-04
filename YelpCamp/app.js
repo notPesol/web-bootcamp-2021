@@ -81,11 +81,11 @@ app.use('/', usersRoute);
 app.use('/campgrounds', campgroundsRoute);
 app.use('/campgrounds/:id/reviews', reviewsRoute);
 
-app.get('/fakeUser', async (req, res) => {
-    const user = new User({ email: 'pesol@lol.com', username: 'pesol' });
-    const newUser = await User.register(user, 'monkey') // save โดยอัตโนมัติ
-    res.send(newUser);
-})
+// app.get('/fakeUser', async (req, res) => {
+//     const user = new User({ email: 'pesol@lol.com', username: 'pesol' });
+//     const newUser = await User.register(user, 'monkey') // save โดยอัตโนมัติ
+//     res.send(newUser);
+// })
 
 // root page
 app.get('/', (req, res) => {
